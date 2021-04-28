@@ -48,11 +48,17 @@ const Menu = ({ menuCfg }) => {
 
 const SidePanel = ({ menuCfg }) => {
   return (
-    <div className="w-64">
-      <div className="fixed overflow-y-hidden z-1 w-64 h-full px-8 py-4 bg-gray-100 border-r border-purple-500">
-        <img className="px-4" src={Logo} alt="logo" />
-        <Menu menuCfg={menuCfg} />
-        <img className="mt-8" src={Aik1_alt} alt="logo" />
+    <div className="w-64 h-screen max-h-screen">
+      <div className="fixed flex flex-col overflow-y-hidden z-1 w-64 h-full px-8 py-4 bg-gray-100 border-r border-purple-400">
+        <div className="z-10">
+          <img className="px-4" src={Logo} alt="logo" />
+          <Menu menuCfg={menuCfg} />
+        </div>
+        <img
+          className="w-full m-auto flex-1 mt-6 px-2 opacity-100 z-0 object-contain"
+          src={Aik1_alt}
+          alt="logo"
+        />
       </div>
     </div>
   )
