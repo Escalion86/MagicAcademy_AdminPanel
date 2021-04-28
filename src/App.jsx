@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import logo from './logo.svg'
 
 import './App.css'
@@ -7,9 +7,18 @@ import Avatar from './img/avatar.jpg'
 
 import SidePanel from './Pages/Blocks/SidePanel'
 import Header from './Pages/Blocks/Header'
-import LessonCard from './Pages/Components/LessonCard'
+import CourseCards from './Pages/Components/CourseCards'
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  // const [splashShow, setSplashShow] = useState(false)
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
+  }
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
+
   const menuCfg = [
     {
       name: 'Обучающие материалы',
@@ -38,39 +47,71 @@ function App() {
     },
   ]
 
+  const courses = [
+    {
+      name: 'Курс №1',
+      lessons: [
+        {
+          id: 0,
+          name: 'Урок №1',
+          description: 'Описание первого урока',
+          stars: 2,
+          status: 4,
+          author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
+        },
+        {
+          id: 1,
+          name: 'Урок №2',
+          description: 'Описание второго урока',
+          stars: 3,
+          status: 3,
+          author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
+        },
+        {
+          id: 2,
+          name: 'Урок №3',
+          description: 'Описание третьего урока',
+          stars: 5,
+          status: 2,
+          author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
+        },
+        {
+          id: 2,
+          name: 'Урок №4',
+          description: 'Описание четвертого урока',
+          stars: 7,
+          status: 1,
+          author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
+        },
+        {
+          id: 2,
+          name: 'Урок №5',
+          description: 'Описание пятого урока',
+          stars: 8,
+          status: 0,
+          author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
+        },
+      ],
+    },
+  ]
+
   return (
     <div className="h-screen flex">
-      <SidePanel menuCfg={menuCfg} />
+      <SidePanel menuCfg={menuCfg} menuOpen={menuOpen} />
       <div className="relative flex-1 min-w-0 bg-white">
-        <Header avatar={Avatar} />
+        <Header
+          avatar={Avatar}
+          menuOpen={menuOpen}
+          onClick={() => toggleMenu()}
+          closeMenu={() => closeMenu()}
+        />
         <h2 className="text-2xl font-semibold py-2 px-6 border-b border-gray-200 text-gray-900 leading-tight">
           Видео уроки
         </h2>
         <div className="items-center justify-between">
-          <main className="p-3 space-y-3 ">
-            <div className="p-3 bg-gray-100 rounded-md">
-              <h3 className="text-base font-medium text-gray-900">Курс №1</h3>
-              <ul className="space-y-2 mt-2">
-                <LessonCard
-                  name="Название урока"
-                  description="Cillum qui cillum sit fugiat commodo dolore dolore voluptate excepteur velit duis sint labore in. Pariatur id dolor esse velit ipsum tempor. Et reprehenderit nisi dolore ut sint qui elit. Cupidatat cupidatat incididunt esse nisi exercitation proident commodo proident eu tempor. Minim cillum incididunt dolore est minim fugiat pariatur sit aliqua."
-                  stars={4}
-                  status={0}
-                  avatar={Avatar}
-                />
-                <LessonCard
-                  name="Название урока"
-                  description="Qui dolor nisi in magna laboris deserunt cillum proident sit tempor aliqua pariatur amet."
-                  stars={8}
-                  status={1}
-                />
-                <LessonCard
-                  name="Название урока"
-                  description="Описание урока"
-                  stars={9}
-                  status={2}
-                />
-              </ul>
+          <main className="p-3">
+            <div className="space-y-3">
+              <CourseCards course={courses[0]} />
             </div>
           </main>
         </div>

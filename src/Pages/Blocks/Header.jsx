@@ -1,31 +1,64 @@
 import React from 'react'
 
-const Header = ({ avatar }) => {
+import './Header.css'
+
+const Burger = ({
+  menuOpen = () => {},
+  onClick = () => {},
+  className = '',
+}) => {
+  return (
+    <div
+      className={
+        'menu-btn' +
+        (menuOpen ? ' open' : '') +
+        (className ? ' ' + className : '')
+      }
+      onClick={onClick}
+    >
+      <div className="menu-btn__burger" />
+    </div>
+  )
+}
+
+const Header = ({
+  avatar,
+  menuOpen = false,
+  onClick = () => {},
+  closeMenu = () => {},
+}) => {
   return (
     <div className="sticky top-0 bg-white border-b border-purple-400">
       <header className="px-6">
         <div className="flex justify-between items-center py-3 border-gray-200">
-          <div>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-2 flex items-center">
-                <svg
-                  className="h-6 w-6 text-gray-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </span>
-              <input
-                className="block w-full rounded-md border border-gray-400 pl-10 pr-4 py-2 text-sm text-gray-900 placeholder-gray-500"
-                type="text"
-                placeholder="Поиск"
-              />
+          <div className="flex items-center">
+            <Burger
+              className="flex lg:hidden z-20"
+              menuOpen={menuOpen}
+              onClick={onClick}
+            />
+            <div className="ml-5 lg:ml-0">
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-2 flex items-center">
+                  <svg
+                    className="h-6 w-6 text-gray-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </span>
+                <input
+                  className="block w-full rounded-md border border-gray-400 pl-10 pr-4 py-2 text-sm text-gray-900 placeholder-gray-500"
+                  type="text"
+                  placeholder="Поиск"
+                />
+              </div>
             </div>
           </div>
           <div className="flex items-center">

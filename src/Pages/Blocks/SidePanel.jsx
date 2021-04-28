@@ -46,19 +46,28 @@ const Menu = ({ menuCfg }) => {
   )
 }
 
-const SidePanel = ({ menuCfg }) => {
+const SidePanel = ({ menuCfg, menuOpen = false }) => {
   return (
-    <div className="w-64 h-screen max-h-screen">
-      <div className="fixed flex flex-col overflow-y-hidden z-1 w-64 h-full px-8 py-4 bg-gray-100 border-r border-purple-400">
-        <div className="z-10">
-          <img className="px-4" src={Logo} alt="logo" />
-          <Menu menuCfg={menuCfg} />
+    <div
+      className={
+        'fixed lg:static w-64 h-screen max-h-screen left-0 top-16 lg:top-0 z-10 transform duration-200 lg:transform-none lg:duration-0' +
+        (!menuOpen
+          ? ' scale-x-0 -translate-x-32 lg:scale-x-100 lg:translate-x-0'
+          : '')
+      }
+    >
+      <div className="lg:block h-full">
+        <div className="lg:fixed flex flex-col overflow-y-hidden z-1 w-64 h-full px-8 py-4 bg-gray-100 border-r border-purple-400">
+          <div className="z-10">
+            <img className="px-4" src={Logo} alt="logo" />
+            <Menu menuCfg={menuCfg} />
+          </div>
+          <img
+            className="hidden lg:block w-full m-auto flex-1 mt-6 px-2 opacity-100 z-0 object-contain"
+            src={Aik1_alt}
+            alt="logo"
+          />
         </div>
-        <img
-          className="w-full m-auto flex-1 mt-6 px-2 opacity-100 z-0 object-contain"
-          src={Aik1_alt}
-          alt="logo"
-        />
       </div>
     </div>
   )
