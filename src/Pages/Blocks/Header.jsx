@@ -2,9 +2,9 @@ import React from 'react'
 
 const Header = ({ avatar }) => {
   return (
-    <div className="sticky top-0 bg-white border-b-2 border-gray-200">
+    <div className="sticky top-0 bg-white border-b border-purple-400">
       <header className="px-6">
-        <div className="flex justify-between items-center py-3 border-b border-gray-200">
+        <div className="flex justify-between items-center py-3 border-gray-200">
           <div>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-2 flex items-center">
