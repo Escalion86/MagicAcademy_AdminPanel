@@ -1,4 +1,23 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: *');
+header('Access-Control-Allow-Headers: content-type');
+header("Content-Type: text/html; charset=utf-8");
+$data = 'apple';
+
+echo 'TEST';
+
+
+<?php
+  header("Content-Type: text/html; charset=utf-8");
+  if (isset($_POST["send"]))
+  {
+    $_POST["send"];
+    $_POST["firstName"];
+    $_POST["lastName"];
+  }
+?>
+<?php
  header("Content-Type: text/html; charset=utf-8");
  $DB_Name = "EscalCRM";
  $DB_Adress = "127.0.0.1";
