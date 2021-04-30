@@ -24,11 +24,12 @@ const Burger = ({
 }
 
 const Header = ({
-  avatar,
+  userState,
   menuOpen = false,
   onClick = () => {},
   closeMenu = () => {},
 }) => {
+  console.log('userState :>> ', userState)
   return (
     <div className="sticky top-0 bg-white border-b border-purple-400">
       <header className="px-6">
@@ -87,10 +88,13 @@ const Header = ({
                     ></path>
                   </svg> */}
             </button>
+            {/* <div>
+              {userState ? (userState?.name ? userState.name : null) : null}
+            </div> */}
             <button className="ml-5">
               <img
                 className="h-9 w-9 min-w-9 rounded-full object-cover"
-                src={avatar}
+                src={'src/img/avatars/' + userState.id + '.jpg'}
                 alt="Avatar"
               />
             </button>
