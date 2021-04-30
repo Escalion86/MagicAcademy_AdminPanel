@@ -3,17 +3,17 @@ import React from 'react'
 import Logo from '../../img/HeadLogo.png'
 import Aik1_alt from '../../img/aik1_alt.png'
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, onClick = () => {}, active = false }) => {
   return (
     <div className="mt-2 -mx-3">
       <a
         className="flex justify-between items-center px-3 py-1 bg-gray-200 rounded-lg hover:bg-purple-200"
-        href={item.href}
+        onClick={() => onClick(item.id)}
       >
         <span
           className={
             'text-sm font-medium ' +
-            (item.active ? 'text-purple-700' : 'text-gray-700')
+            (active ? 'text-purple-700' : 'text-gray-700')
           }
         >
           {item.name}
@@ -28,27 +28,32 @@ const MenuItem = ({ item }) => {
   )
 }
 
-const Menu = ({ menuCfg }) => {
+const Menu = ({ menuCfg, setPageId, activePageId }) => {
   return (
     <nav className="mt-2">
       {menuCfg &&
         menuCfg.length > 0 &&
-        menuCfg.map((item) => (
-          <>
+        menuCfg.map((item, index) => (
+          <div key={'groupMenu' + index}>
             <h3 className="mt-6 text-xs font-semibold text-gray-600 uppercase tracking-wide">
               {item.name}
             </h3>
             {item.items.length > 0 &&
               item.items.map((subitem, index) => (
-                <MenuItem key={'menu' + index} item={subitem} />
+                <MenuItem
+                  key={'menu' + subitem.id}
+                  item={subitem}
+                  onClick={setPageId}
+                  active={activePageId === subitem.id}
+                />
               ))}
-          </>
+          </div>
         ))}
     </nav>
   )
 }
 
-const SidePanel = ({ menuCfg, menuOpen = false }) => {
+const SidePanel = ({ menuCfg, menuOpen = false, setPageId, activePageId }) => {
   return (
     <div
       className={
@@ -62,7 +67,11 @@ const SidePanel = ({ menuCfg, menuOpen = false }) => {
         <div className="lg:fixed flex flex-col overflow-y-hidden z-1 w-64 h-full px-8 py-4 bg-gray-100 border-r border-purple-400">
           <div className="z-10">
             <img className="px-4" src={Logo} alt="logo" />
-            <Menu menuCfg={menuCfg} />
+            <Menu
+              menuCfg={menuCfg}
+              setPageId={setPageId}
+              activePageId={activePageId}
+            />
           </div>
           <img
             className="hidden lg:block w-full m-auto flex-1 mt-6 px-2 opacity-100 z-0 object-contain"
