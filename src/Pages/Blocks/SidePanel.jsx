@@ -39,7 +39,9 @@ const Menu = ({ menuCfg }) => {
               {item.name}
             </h3>
             {item.items.length > 0 &&
-              item.items.map((subitem) => <MenuItem item={subitem} />)}
+              item.items.map((subitem, index) => (
+                <MenuItem key={'menu' + index} item={subitem} />
+              ))}
           </>
         ))}
     </nav>
@@ -50,7 +52,7 @@ const SidePanel = ({ menuCfg, menuOpen = false }) => {
   return (
     <div
       className={
-        'fixed lg:static w-64 h-screen max-h-screen left-0 top-16 lg:top-0 z-10 transform duration-200 lg:transform-none lg:duration-0' +
+        'fixed lg:static w-64 h-screen max-h-screen left-0 top-menu lg:top-0 z-10 transform duration-200 lg:transform-none lg:duration-0 border-t border-purple-400 lg:border-t-0' +
         (!menuOpen
           ? ' scale-x-0 -translate-x-32 lg:scale-x-100 lg:translate-x-0'
           : '')
