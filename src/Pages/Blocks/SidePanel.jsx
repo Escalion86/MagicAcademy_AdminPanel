@@ -3,12 +3,18 @@ import React from 'react'
 import Logo from '../../img/HeadLogo.png'
 import Aik1_alt from '../../img/aik1_alt.png'
 
-const MenuItem = ({ item, onClick = () => {}, active = false }) => {
+const MenuItem = ({ item, setPageId = () => {}, active = false }) => {
   return (
     <div className="mt-2 -mx-3">
       <a
-        className="flex justify-between items-center px-3 py-1 bg-gray-200 rounded-lg hover:bg-purple-200"
-        onClick={() => onClick(item.id)}
+        className="flex cursor-pointer justify-between items-center px-3 py-1 bg-gray-200 rounded-lg hover:bg-purple-200"
+        onClick={() => {
+          if (typeof item?.onChoose === 'function') {
+            item.onChoose()
+          } else {
+            setPageId(item.id)
+          }
+        }}
       >
         <span
           className={
@@ -43,7 +49,7 @@ const Menu = ({ menuCfg, setPageId, activePageId }) => {
                 <MenuItem
                   key={'menu' + subitem.id}
                   item={subitem}
-                  onClick={setPageId}
+                  setPageId={setPageId}
                   active={activePageId === subitem.id}
                 />
               ))}
@@ -53,7 +59,13 @@ const Menu = ({ menuCfg, setPageId, activePageId }) => {
   )
 }
 
-const SidePanel = ({ menuCfg, menuOpen = false, setPageId, activePageId }) => {
+const SidePanel = ({
+  menuCfg,
+  menuOpen = false,
+  setPageId,
+  activePageId,
+  closeMenu,
+}) => {
   return (
     <div
       className={
@@ -69,7 +81,10 @@ const SidePanel = ({ menuCfg, menuOpen = false, setPageId, activePageId }) => {
             <img className="px-4" src={Logo} alt="logo" />
             <Menu
               menuCfg={menuCfg}
-              setPageId={setPageId}
+              setPageId={(id) => {
+                setPageId(id)
+                closeMenu()
+              }}
               activePageId={activePageId}
             />
           </div>

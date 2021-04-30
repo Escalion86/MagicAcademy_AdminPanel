@@ -22,20 +22,27 @@ function Cabinet({ page, setPageId, courses, menuCfg, user, userSetState }) {
         menuOpen={menuOpen}
         setPageId={setPageId}
         activePageId={page.id}
+        closeMenu={closeMenu}
       />
       <div className="relative flex-1 min-w-0 bg-white">
         <Header
           user={user}
           menuOpen={menuOpen}
-          onClick={() => toggleMenu()}
-          closeMenu={() => closeMenu()}
+          onClick={toggleMenu}
+          closeMenu={closeMenu}
         />
         <h2 className="text-2xl font-semibold py-2 px-6 border-b border-gray-200 text-gray-900 leading-tight">
-          {page.name}
+          {page.header}
         </h2>
-        {typeof page?.pageContent === 'function'
-          ? page.pageContent({ courses })
-          : null}
+        <main className="p-3">
+          {typeof page?.pageContent === 'function' ? (
+            page.pageContent({ courses })
+          ) : (
+            <div className="text-gray-700 text-base w-full text-center">
+              Страница в разработке
+            </div>
+          )}
+        </main>
       </div>
     </div>
   )

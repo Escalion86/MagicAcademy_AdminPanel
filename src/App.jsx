@@ -10,7 +10,7 @@ import VideoLessons from './Pages/PageContent/VideoLessons'
 
 import Avatar from './img/avatar.jpg'
 
-const courses = [
+const coursesDB = [
   {
     name: 'Курс №1',
     lessons: [
@@ -87,29 +87,65 @@ const courses = [
   },
 ]
 
-const pages = [
-  { id: 0, name: 'Видео уроки', pageContent: VideoLessons }, // 0
-  { id: 1, name: 'Расписание живых уроков', pageContent: null }, // 1
-  { id: 2, name: 'Расписание онлайн уроков', pageContent: null }, // 2
-  { id: 3, name: 'Параметры', pageContent: null }, // 3
-  { id: 4, name: 'Выход', pageContent: null },
-]
-
-const menuCfg = [
-  {
-    name: 'Обучающие материалы',
-    items: [pages[0], pages[1], pages[2]],
-  },
-  {
-    name: 'Учетная запись',
-    items: [pages[3], pages[4]],
-  },
-]
-
 function App() {
   const [userState, setUserState] = useState(null)
-  const [coursesState, setCoursesState] = useState(courses)
-  const [activePage, setActivePage] = useState(pages[0])
+  const [courses, setCourses] = useState(coursesDB)
+  const [pageId, setPageId] = useState(0)
+
+  const SignOut = () => {
+    setUserState(null)
+    setPageId(0)
+    coursesState(null)
+  }
+
+  const pages = [
+    {
+      id: 0,
+      name: 'Видео уроки',
+      header: 'Видео уроки',
+      pageContent: VideoLessons,
+      onChoose: null,
+    }, // 0
+    {
+      id: 1,
+      name: 'Расписание живых уроков',
+      header: 'Расписание живых уроков',
+      pageContent: null,
+      onChoose: null,
+    }, // 1
+    {
+      id: 2,
+      name: 'Расписание онлайн уроков',
+      header: 'Расписание онлайн уроков',
+      pageContent: null,
+      onChoose: null,
+    }, // 2
+    {
+      id: 3,
+      name: 'Параметры',
+      header: 'Параметры учетной записи',
+      pageContent: null,
+      onChoose: null,
+    }, // 3
+    {
+      id: 4,
+      name: 'Выход',
+      header: null,
+      pageContent: null,
+      onChoose: SignOut,
+    },
+  ]
+
+  const menuCfg = [
+    {
+      name: 'Обучающие материалы',
+      items: [pages[0], pages[1], pages[2]],
+    },
+    {
+      name: 'Учетная запись',
+      items: [pages[3], pages[4]],
+    },
+  ]
 
   const setActivePageId = (id) => {
     for (let i = 0; i < pages.length; i++) {
@@ -123,9 +159,9 @@ function App() {
   if (userState)
     return (
       <Cabinet
-        page={activePage}
-        setPageId={setActivePageId}
-        courses={coursesState}
+        page={pages[pageId]}
+        setPageId={setPageId}
+        courses={courses}
         menuCfg={menuCfg}
         user={userState}
         userSetState={setUserState}
