@@ -8,9 +8,10 @@ const LessonCard = ({
   stars = 0,
   status = 0, // 0 - не доступен, 1 - доступен, но не начат, 2 - не принят, 3 - на проверке, 4 - выполнен
   avatar = null,
+  className = '',
 }) => {
   return (
-    <li className="min-w-min">
+    <li className={'min-w-min' + (className ? ' ' + className : '')}>
       <a href="#" className="block px-5 py-4 bg-white rounded-md shadow">
         <div className="flex justify-between items-center">
           <p className="text-sm font-medium leading-snug text-gray-900">

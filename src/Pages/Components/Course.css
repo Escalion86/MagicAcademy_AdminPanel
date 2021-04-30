@@ -1,0 +1,62 @@
+.list-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+  /* border: 3px solid #fff; */
+}
+
+.list-btn__arrow {
+  width: 12px;
+  height: 2px;
+  background: #000;
+  border-radius: 5px;
+  /* box-shadow: 0 2px 5px #fff; */
+  transition: all .3s ease-in-out;
+  transform: rotate(45deg);
+  margin-left: -12px;
+}
+
+.list-btn__arrow::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 2px;
+  background: #000;
+  border-radius: 5px;
+  /* box-shadow: 0 2px 5px #fff; */
+  transition: all .3s ease-in-out;
+}
+
+.list-btn__arrow::after {
+  transform: translateY(-5px) translateX(5px) rotate(-90deg)
+}
+
+/* ANIMATION */
+
+.list-btn.open .list-btn__arrow {
+  transform: rotate(-45deg);
+}
+
+.list-btn.open .list-btn__arrow:after {
+  transform: translateY(5px) translateX(5px) rotate(90deg)
+}
+
+.lesson {
+  transition: all .2s ease-out;
+  max-height: 500px;
+  margin-top: 0.5rem;
+  transform: scaleY(1);
+}
+
+.lesson.close {
+  max-height: 0px;
+  overflow: hidden;
+  /* height: auto; */
+  margin-top: 0px;
+  transform: scaleY(0.9);
+}
