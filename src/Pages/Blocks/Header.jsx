@@ -1,8 +1,105 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+
+import { Menu, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+// import { Menu } from '@headlessui/react'
 
 import './Header.css'
 
 import SearchInput from '../Components/SearchInput'
+
+const UserMenu = ({ user, setPageId = () => {}, onSignOut = () => {} }) => {
+  return (
+    <div className="h-11 w-11 -mt-1 -mb-1 ml-5 z-20">
+      <Menu as="div" className="relative inline-block text-left h-11 w-11">
+        {({ open }) => (
+          <>
+            <div className="absolute left-0 z-50 h-11 w-11">
+              <Menu.Button as="div">
+                <img
+                  className="h-11 w-11 min-w-9 rounded-full object-cover cursor-pointer"
+                  src={'src/img/avatars/' + user.id + '.jpg'}
+                  alt="Avatar"
+                />
+              </Menu.Button>
+            </div>
+            <Transition
+              show={open}
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items
+                static
+                className="absolute z-0 -top-2 right-5 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-mdshadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              >
+                <div className="flex items-center pl-2 pr-6 py-1 min-h-11 text-gray-900">
+                  Белинский Алексей Алексеевич
+                </div>
+                <div className="px-1 py-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        className={`${
+                          active ? 'bg-purple-500 text-white' : 'text-gray-900'
+                        } group flex rounded-md items-center w-full px-2 py-2 text-sm cursor-pointer`}
+                        onClick={() => setPageId(3)}
+                      >
+                        {active ? (
+                          <FontAwesomeIcon
+                            className="w-5 h-5 mr-2 text-white"
+                            icon={faUser}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            className="w-5 h-5 mr-2 text-purple-500"
+                            icon={faUser}
+                          />
+                        )}
+                        Учетная запись
+                      </a>
+                    )}
+                  </Menu.Item>
+                </div>
+                <div className="px-1 py-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        className={`${
+                          active ? 'bg-purple-500 text-white' : 'text-gray-900'
+                        } group flex rounded-md items-center w-full px-2 py-2 text-sm cursor-pointer`}
+                        onClick={onSignOut}
+                      >
+                        {active ? (
+                          <FontAwesomeIcon
+                            className="w-5 h-5 mr-2 text-white"
+                            icon={faSignOutAlt}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            className="w-5 h-5 mr-2 text-purple-500"
+                            icon={faSignOutAlt}
+                          />
+                        )}
+                        Выход
+                      </a>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </>
+        )}
+      </Menu>
+    </div>
+  )
+}
 
 const Burger = ({
   menuOpen = () => {},
@@ -26,25 +123,27 @@ const Burger = ({
 const Header = ({
   user,
   menuOpen = false,
-  onClick = () => {},
+  setPageId = () => {},
+  onClickBurger = () => {},
   closeMenu = () => {},
+  onSignOut = () => {},
 }) => {
   return (
-    <div className="sticky top-0 bg-white border-b border-purple-400">
+    <div className="sticky top-0 bg-white border-b border-purple-400 z-20">
       <header className="px-6">
         <div className="flex justify-between items-center py-3 border-gray-200">
           <div className="flex flex-1 items-center">
             <Burger
               className="flex lg:hidden z-20"
               menuOpen={menuOpen}
-              onClick={onClick}
+              onClick={onClickBurger}
             />
             <div className="hidden sm:block ml-5 lg:ml-0 w-96">
               <SearchInput onPressEnter={() => {}} />
             </div>
           </div>
           <div className="flex items-center">
-            <button className="ml-5">
+            <div className="ml-5 cursor-pointer">
               <svg
                 className="h-6 w-6 text-gray-500"
                 viewBox="0 0 24 24"
@@ -86,17 +185,19 @@ const Header = ({
                       d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg> */}
-            </button>
+            </div>
             {/* <div>
               {userState ? (userState?.name ? userState.name : null) : null}
             </div> */}
-            <button className="ml-5">
+            {/* <button className="ml-5">
               <img
                 className="h-9 w-9 min-w-9 rounded-full object-cover"
                 src={'src/img/avatars/' + user.id + '.jpg'}
                 alt="Avatar"
               />
-            </button>
+            </button> */}
+
+            <UserMenu user={user} setPageId={setPageId} onSignOut={onSignOut} />
           </div>
         </div>
       </header>

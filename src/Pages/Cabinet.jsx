@@ -5,7 +5,15 @@ import axios from 'axios'
 import SidePanel from './Blocks/SidePanel'
 import Header from './Blocks/Header'
 
-function Cabinet({ page, setPageId, courses, menuCfg, user, userSetState }) {
+function Cabinet({
+  page,
+  setPageId,
+  courses,
+  menuCfg,
+  user,
+  userSetState,
+  onSignOut,
+}) {
   const [menuOpen, setMenuOpen] = useState(false)
   // const [splashShow, setSplashShow] = useState(false)
   const toggleMenu = () => {
@@ -28,8 +36,10 @@ function Cabinet({ page, setPageId, courses, menuCfg, user, userSetState }) {
         <Header
           user={user}
           menuOpen={menuOpen}
-          onClick={toggleMenu}
+          setPageId={setPageId}
+          onClickBurger={toggleMenu}
           closeMenu={closeMenu}
+          onSignOut={onSignOut}
         />
         <h2 className="text-2xl font-semibold py-2 px-6 border-b border-gray-200 text-gray-900 leading-tight">
           {page.header}

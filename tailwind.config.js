@@ -7,8 +7,11 @@ module.exports = {
         9: '2.25rem',
         32: '8rem',
       },
+      minHeight: {
+        11: '2.75rem',
+      },
       inset: {
-        menu: '3.80rem',
+        menu: '3.70rem',
       },
     },
   },

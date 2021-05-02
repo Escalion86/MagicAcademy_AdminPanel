@@ -7,6 +7,7 @@ import './App.css'
 import Sign from './Pages/Sign'
 import Cabinet from './Pages/Cabinet'
 import VideoLessons from './Pages/PageContent/VideoLessons'
+import Account from './Pages/PageContent/Account'
 
 import Avatar from './img/avatar.jpg'
 
@@ -40,7 +41,7 @@ const coursesDB = [
         author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
       },
       {
-        id: 2,
+        id: 3,
         name: 'Урок №4',
         description: 'Описание четвертого урока',
         stars: 7,
@@ -48,7 +49,7 @@ const coursesDB = [
         author: { id: 1, name: 'Алексей Белинский', avatar: Avatar },
       },
       {
-        id: 2,
+        id: 4,
         name: 'Урок №5',
         description: 'Описание пятого урока',
         stars: 8,
@@ -107,7 +108,6 @@ function App() {
       name: 'Видео уроки',
       header: 'Видео уроки',
       pageContent: VideoLessons,
-      onChoose: null,
     }, // 0
     {
       id: 1,
@@ -115,7 +115,6 @@ function App() {
       name: 'Расписание живых уроков',
       header: 'Расписание живых уроков',
       pageContent: null,
-      onChoose: null,
     }, // 1
     {
       id: 2,
@@ -123,24 +122,21 @@ function App() {
       name: 'Расписание онлайн уроков',
       header: 'Расписание онлайн уроков',
       pageContent: null,
-      onChoose: null,
     }, // 2
     {
       id: 3,
-      group: 1,
+      group: null,
       name: 'Параметры',
       header: 'Параметры учетной записи',
-      pageContent: null,
-      onChoose: null,
+      pageContent: Account,
     }, // 3
-    {
-      id: 4,
-      group: 1,
-      name: 'Выход',
-      header: null,
-      pageContent: null,
-      onChoose: SignOut,
-    },
+    // {
+    //   id: 4,
+    //   group: 1,
+    //   name: 'Выход',
+    //   header: null,
+    //   pageContent: null,
+    // },
   ]
 
   const pagesGroups = [
@@ -155,7 +151,7 @@ function App() {
       pages.forEach((page) => {
         if (page.group === group.id) items.push(page)
       })
-      result.push({ name: group.name, items })
+      if (items.length > 0) result.push({ name: group.name, items })
     })
     return result
   }
@@ -178,6 +174,7 @@ function App() {
         menuCfg={menuCfg(pages, pagesGroups)}
         user={userState}
         userSetState={setUserState}
+        onSignOut={SignOut}
       />
     )
   else return <Sign user={userState} setUserState={setUserState} />

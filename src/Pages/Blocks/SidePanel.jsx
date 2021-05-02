@@ -9,11 +9,7 @@ const MenuItem = ({ item, setPageId = () => {}, active = false }) => {
       <a
         className="flex cursor-pointer justify-between items-center px-3 py-1 bg-gray-200 rounded-lg hover:bg-purple-200"
         onClick={() => {
-          if (typeof item?.onChoose === 'function') {
-            item.onChoose()
-          } else {
-            setPageId(item.id)
-          }
+          setPageId(item.id)
         }}
       >
         <span
