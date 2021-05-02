@@ -32,7 +32,7 @@ const Course = ({ course }) => {
           {course.lessons.map((lesson, index) => {
             return (
               <LessonCard
-                key={'lesson' + index}
+                key={'lesson' + lesson.id}
                 name={lesson.name}
                 description={lesson.description}
                 stars={lesson.stars}
