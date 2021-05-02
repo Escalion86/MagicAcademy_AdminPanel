@@ -12,6 +12,7 @@ import Avatar from './img/avatar.jpg'
 
 const coursesDB = [
   {
+    id: 0,
     name: 'Курс №1',
     lessons: [
       {
@@ -57,6 +58,7 @@ const coursesDB = [
     ],
   },
   {
+    id: 1,
     name: 'Курс №2',
     lessons: [
       {
@@ -95,12 +97,13 @@ function App() {
   const SignOut = () => {
     setUserState(null)
     setPageId(0)
-    coursesState(null)
+    setCourses(null)
   }
 
   const pages = [
     {
       id: 0,
+      group: 0,
       name: 'Видео уроки',
       header: 'Видео уроки',
       pageContent: VideoLessons,
@@ -108,6 +111,7 @@ function App() {
     }, // 0
     {
       id: 1,
+      group: 0,
       name: 'Расписание живых уроков',
       header: 'Расписание живых уроков',
       pageContent: null,
@@ -115,6 +119,7 @@ function App() {
     }, // 1
     {
       id: 2,
+      group: 0,
       name: 'Расписание онлайн уроков',
       header: 'Расписание онлайн уроков',
       pageContent: null,
@@ -122,6 +127,7 @@ function App() {
     }, // 2
     {
       id: 3,
+      group: 1,
       name: 'Параметры',
       header: 'Параметры учетной записи',
       pageContent: null,
@@ -129,6 +135,7 @@ function App() {
     }, // 3
     {
       id: 4,
+      group: 1,
       name: 'Выход',
       header: null,
       pageContent: null,
@@ -136,25 +143,31 @@ function App() {
     },
   ]
 
-  const menuCfg = [
-    {
-      name: 'Обучающие материалы',
-      items: [pages[0], pages[1], pages[2]],
-    },
-    {
-      name: 'Учетная запись',
-      items: [pages[3], pages[4]],
-    },
+  const pagesGroups = [
+    { id: 0, name: 'Обучающие материалы' },
+    { id: 1, name: 'Учетная запись' },
   ]
 
-  const setActivePageId = (id) => {
-    for (let i = 0; i < pages.length; i++) {
-      if (id === pages[i].id) {
-        setActivePage(pages[i])
-        break
-      }
-    }
+  const menuCfg = (pages, pagesGroups) => {
+    let result = []
+    pagesGroups.forEach((group) => {
+      let items = []
+      pages.forEach((page) => {
+        if (page.group === group.id) items.push(page)
+      })
+      result.push({ name: group.name, items })
+    })
+    return result
   }
+
+  // const setActivePageId = (id) => {
+  //   for (let i = 0; i < pages.length; i++) {
+  //     if (id === pages[i].id) {
+  //       setActivePage(pages[i])
+  //       break
+  //     }
+  //   }
+  // }
 
   if (userState)
     return (
@@ -162,7 +175,7 @@ function App() {
         page={pages[pageId]}
         setPageId={setPageId}
         courses={courses}
-        menuCfg={menuCfg}
+        menuCfg={menuCfg(pages, pagesGroups)}
         user={userState}
         userSetState={setUserState}
       />
