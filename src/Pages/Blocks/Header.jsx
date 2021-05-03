@@ -45,7 +45,7 @@ const UserMenu = ({
                 className="absolute z-0 -top-2 right-5 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-mdshadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div className="flex italic text-sm font-semibold items-center pl-3 pr-6 py-1 min-h-11 text-gray-900">
-                  Белинский Алексей А.
+                  {user.name}
                 </div>
                 <div className="px-1 py-1">
                   <Menu.Item>
