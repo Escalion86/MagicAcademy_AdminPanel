@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import checkUrlExists from '../helpers/checkUrlExists'
 import InputMask from 'react-input-mask'
 
 import Logo from '../img/HeadLogo.png'
@@ -23,13 +24,23 @@ const Sign = ({ user, setUserState }) => {
         else {
           // Авторизация успешна, теперь проверяем есть ли аватарка на сервере и если нет то ставим стандартную
           const user = response.data.user
-          let img = new Image()
-          img.src = 'src/img/avatars/' + user.id + '.jpg'
-          img.onload = function () {
-            user.avatar = img.src
+          // checkUrlExists(
+          //   'src/img/avatars/' + user.id + '.jpg',
+          //   function () {
+          //     user.avatar = 'src/img/avatars/' + user.id + '.jpg'
+          //     setUserState(user)
+          //   },
+          //   function () {
+          //     user.avatar = user.sex
+          //       ? 'src/img/avatars/male.jpg'
+          //       : 'src/img/avatars/famale.jpg'
+          //     setUserState(user)
+          //   }
+          // )
+          if (checkUrlExists('src/img/avatars/' + user.id + '.jpg')) {
+            user.avatar = 'src/img/avatars/' + user.id + '.jpg'
             setUserState(user)
-          }
-          img.onerror = function () {
+          } else {
             user.avatar = user.sex
               ? 'src/img/avatars/male.jpg'
               : 'src/img/avatars/famale.jpg'
