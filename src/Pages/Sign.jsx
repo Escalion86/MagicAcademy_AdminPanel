@@ -15,7 +15,22 @@ const Sign = ({ user, setUserState }) => {
       .then(function (response) {
         console.log('response: ', response)
         if (response.data?.error) setError(response.data.error)
-        else setUserState(response.data)
+        else {
+          // Авторизация успешна, теперь проверяем есть ли аватарка на сервере и если нет то ставим стандартную
+          const user = response.data
+          let img = new Image()
+          img.src = 'src/img/avatars/' + user.id + '.jpg'
+          img.onload = function () {
+            user.avatar = img.src
+            setUserState(user)
+          }
+          img.onerror = function () {
+            user.avatar = user.sex
+              ? 'src/img/avatars/male.jpg'
+              : 'src/img/avatars/famale.jpg'
+            setUserState(user)
+          }
+        }
       })
       .catch(function (error) {
         console.log('error: ', error)

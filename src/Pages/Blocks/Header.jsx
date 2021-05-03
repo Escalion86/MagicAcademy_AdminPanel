@@ -9,8 +9,13 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import './Header.css'
 
 import SearchInput from '../Components/SearchInput'
+import { DEFAULT_USER } from '../../helpers/constants'
 
-const UserMenu = ({ user, setPageId = () => {}, onSignOut = () => {} }) => {
+const UserMenu = ({
+  user = DEFAULT_USER,
+  setPageId = () => {},
+  onSignOut = () => {},
+}) => {
   return (
     <div className="h-11 w-11 -mt-1 -mb-1 ml-5 z-20">
       <Menu as="div" className="relative inline-block text-left h-11 w-11">
@@ -20,7 +25,7 @@ const UserMenu = ({ user, setPageId = () => {}, onSignOut = () => {} }) => {
               <Menu.Button as="div">
                 <img
                   className="h-11 w-11 min-w-9 rounded-full object-cover cursor-pointer"
-                  src={'src/img/avatars/' + user.id + '.jpg'}
+                  src={user.avatar}
                   alt="Avatar"
                 />
               </Menu.Button>
@@ -39,8 +44,8 @@ const UserMenu = ({ user, setPageId = () => {}, onSignOut = () => {} }) => {
                 static
                 className="absolute z-0 -top-2 right-5 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-mdshadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
-                <div className="flex items-center pl-2 pr-6 py-1 min-h-11 text-gray-900">
-                  Белинский Алексей Алексеевич
+                <div className="flex italic text-sm font-semibold items-center pl-3 pr-6 py-1 min-h-11 text-gray-900">
+                  Белинский Алексей А.
                 </div>
                 <div className="px-1 py-1">
                   <Menu.Item>
@@ -121,7 +126,7 @@ const Burger = ({
 }
 
 const Header = ({
-  user,
+  user = DEFAULT_USER,
   menuOpen = false,
   setPageId = () => {},
   onClickBurger = () => {},

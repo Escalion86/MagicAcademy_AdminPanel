@@ -4,13 +4,14 @@ import axios from 'axios'
 
 import SidePanel from './Blocks/SidePanel'
 import Header from './Blocks/Header'
+import { DEFAULT_USER } from '../helpers/constants'
 
 function Cabinet({
   page,
   setPageId,
   courses,
   menuCfg,
-  user,
+  user = DEFAULT_USER,
   userSetState,
   onSignOut,
 }) {

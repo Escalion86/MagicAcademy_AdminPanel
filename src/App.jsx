@@ -10,6 +10,7 @@ import VideoLessons from './Pages/PageContent/VideoLessons'
 import Account from './Pages/PageContent/Account'
 
 import Avatar from './img/avatar.jpg'
+import { DEFAULT_USER } from './helpers/constants'
 
 const coursesDB = [
   {
@@ -91,7 +92,7 @@ const coursesDB = [
 ]
 
 function App() {
-  const [userState, setUserState] = useState(null)
+  const [userState, setUserState] = useState(DEFAULT_USER)
   const [courses, setCourses] = useState(coursesDB)
   const [pageId, setPageId] = useState(0)
 
@@ -165,7 +166,7 @@ function App() {
   //   }
   // }
 
-  if (userState)
+  if (userState.id > 0)
     return (
       <Cabinet
         page={pages[pageId]}
