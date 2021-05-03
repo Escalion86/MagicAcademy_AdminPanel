@@ -97,7 +97,7 @@ function App() {
   const [pageId, setPageId] = useState(0)
 
   const SignOut = () => {
-    setUserState(null)
+    setUserState(DEFAULT_USER)
     setPageId(0)
     setCourses(null)
   }
@@ -166,7 +166,7 @@ function App() {
   //   }
   // }
 
-  if (userState.id > 0)
+  if (userState?.id > 0)
     return (
       <Cabinet
         page={pages[pageId]}
