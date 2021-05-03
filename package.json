@@ -15,7 +15,8 @@
     "@headlessui/react": "^1.1.1",
     "axios": "^0.21.1",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "react-input-mask": "^3.0.0-alpha.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.1.2",
