@@ -9,8 +9,10 @@ const Sign = ({ user, setUserState }) => {
   const [error, setError] = useState('')
   const [phone, setPhone] = useState('79138370020')
   const [password, setPassword] = useState('123')
+  const [smsCode, setSmsCode] = useState('')
   const [passwordRepeat, setPasswordRepeat] = useState('')
   const [registration, setRegistration] = useState(false)
+  const [registrationPhase, setRegistrationPhase] = useState(0)
 
   const SignIn = () => {
     axios
@@ -19,33 +21,33 @@ const Sign = ({ user, setUserState }) => {
         password,
       })
       .then(function (response) {
-        console.log('response: ', response)
+        console.log('user:', response.data?.user)
         if (response.data?.error) setError(response.data.error)
         else {
           // Авторизация успешна, теперь проверяем есть ли аватарка на сервере и если нет то ставим стандартную
           const user = response.data.user
-          // checkUrlExists(
-          //   'src/img/avatars/' + user.id + '.jpg',
-          //   function () {
-          //     user.avatar = 'src/img/avatars/' + user.id + '.jpg'
-          //     setUserState(user)
-          //   },
-          //   function () {
-          //     user.avatar = user.sex
-          //       ? 'src/img/avatars/male.jpg'
-          //       : 'src/img/avatars/famale.jpg'
-          //     setUserState(user)
-          //   }
-          // )
-          if (checkUrlExists('src/img/avatars/' + user.id + '.jpg')) {
-            user.avatar = 'src/img/avatars/' + user.id + '.jpg'
-            setUserState(user)
-          } else {
-            user.avatar = user.sex
-              ? 'src/img/avatars/male.jpg'
-              : 'src/img/avatars/famale.jpg'
-            setUserState(user)
-          }
+          checkUrlExists(
+            'src/img/avatars/' + user.id + '.jpg',
+            function () {
+              user.avatar = 'src/img/avatars/' + user.id + '.jpg'
+              setUserState(user)
+            },
+            function () {
+              user.avatar = user.sex
+                ? 'src/img/avatars/male.jpg'
+                : 'src/img/avatars/famale.jpg'
+              setUserState(user)
+            }
+          )
+          // if (checkUrlExists('src/img/avatars/' + user.id + '.jpg')) {
+          //   user.avatar = 'src/img/avatars/' + user.id + '.jpg'
+          //   setUserState(user)
+          // } else {
+          //   user.avatar = user.sex
+          //     ? 'src/img/avatars/male.jpg'
+          //     : 'src/img/avatars/famale.jpg'
+          //   setUserState(user)
+          // }
         }
       })
       .catch(function (error) {
@@ -54,20 +56,27 @@ const Sign = ({ user, setUserState }) => {
   }
 
   const Register = () => {
-    if (password !== passwordRepeat) {
+    if (registrationPhase === 2 && password !== passwordRepeat) {
       setError('Пароли не совпадают')
     } else {
       axios
         .post('http://magicacademyserver/register.php', {
           phone,
           password,
+          phase: registrationPhase,
+          smscode: smsCode,
         })
         .then(function (response) {
           console.log('response: ', response)
           if (response.data?.error) setError(response.data.error)
           else {
-            // Регистрация успешна
-            SignIn()
+            if (registrationPhase === 0) {
+              // На телефон выслан код
+              setRegistrationPhase(1)
+            } else if (registrationPhase === 1) {
+              // Код верен
+              setRegistrationPhase(2)
+            } else if (registrationPhase === 2) SignIn() // Регистрация успешна
           }
         })
         .catch(function (error) {
@@ -103,7 +112,7 @@ const Sign = ({ user, setUserState }) => {
 
         <section className="mt-2">
           <div className="flex flex-col">
-            <div className="mb-6 pt-3 rounded bg-gray-200">
+            <div className="mb-4 pt-3 rounded bg-gray-200">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2 ml-3"
                 htmlFor="phone"
@@ -126,39 +135,62 @@ const Sign = ({ user, setUserState }) => {
                 className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
               /> */}
             </div>
-            <div className="mb-4 pt-3 rounded bg-gray-200">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2 ml-3"
-                htmlFor="password"
-              >
-                Пароль
-              </label>
-              <input
-                name="password"
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
-              />
-            </div>
-            {registration && (
+            {registrationPhase >= 1 && (
               <div className="mb-4 pt-3 rounded bg-gray-200">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2 ml-3"
-                  htmlFor="password"
+                  htmlFor="smscode"
                 >
-                  Пароль повторно
+                  Код из смс
                 </label>
                 <input
-                  name="password"
-                  type="password"
-                  id="password"
-                  value={passwordRepeat}
-                  onChange={(e) => setPasswordRepeat(e.target.value)}
+                  disabled={registrationPhase !== 1}
+                  name="smscode"
+                  // type="password"
+                  id="smscode"
+                  value={smsCode}
+                  onChange={(e) => setSmsCode(e.target.value)}
                   className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                 />
               </div>
+            )}
+            {(!registration || registrationPhase === 2) && (
+              <>
+                <div className="mb-4 pt-3 rounded bg-gray-200">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2 ml-3"
+                    htmlFor="password"
+                  >
+                    Пароль
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                  />
+                </div>
+                {registration && (
+                  <div className="mb-4 pt-3 rounded bg-gray-200">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2 ml-3"
+                      htmlFor="passwordrepeat"
+                    >
+                      Пароль повторно
+                    </label>
+                    <input
+                      name="passwordrepeat"
+                      type="password"
+                      id="passwordrepeat"
+                      value={passwordRepeat}
+                      onChange={(e) => setPasswordRepeat(e.target.value)}
+                      className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                    />
+                  </div>
+                )}
+              </>
             )}
             {error && (
               <span className="text-sm font-bold text-red-700  mb-4">

@@ -4,7 +4,7 @@
   header('Access-Control-Allow-Headers: content-type');
   header("Content-Type: text/html; charset=utf-8");
 
-  require 'rb.php';
+  require 'plugins/rb.php';
 
   $_POST = json_decode(file_get_contents('php://input'), true);
 

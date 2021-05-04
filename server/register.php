@@ -4,7 +4,8 @@
   header('Access-Control-Allow-Headers: content-type');
   header("Content-Type: text/html; charset=utf-8");
 
-  require 'rb.php';
+  require 'plugins/rb.php';
+  require_once 'plugins/sms.ru.php';
 
   function md5codegenerator() {
     $simv = array ("9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "k", "l", "m", "n", "o", "p", "q", "r", "s", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "t", "u", "v", "w", "x", "y", "z");
@@ -20,7 +21,12 @@
 
   $_POST = json_decode(file_get_contents('php://input'), true);
 
-  if (isset($_POST["password"]) && isset($_POST["phone"]) && $_POST["password"] != '' && $_POST["phone"] != '')
+  $phase = htmlspecialchars($_POST["phase"]);
+  $phone = htmlspecialchars(strtolower(trim($_POST["phone"]))); //htmlspecialchars(strtolower(trim($_POST["phone"])));
+  $password = htmlspecialchars($_POST["password"]); // htmlspecialchars($_POST["password"]);
+  $smscode = htmlspecialchars($_POST["smscode"]);
+
+  if (!empty($phase) && !empty($phone) && (!($phase == "1" && empty($smscode))) || (!($phase == "2" && (empty($password) || empty($smscode)))))
   {
     $DB_Adress = "127.0.0.1";
     $DB_BaseName = "magicacademy";
@@ -35,24 +41,102 @@
     session_start();
     // $phone = mysqli_real_escape_string($mysqli, strtolower(trim($_POST["phone"]))); //htmlspecialchars(strtolower(trim($_POST["phone"])));
     // $password = mysqli_real_escape_string($mysqli, $_POST["password"]); // htmlspecialchars($_POST["password"]);
-    $phone = htmlspecialchars(strtolower(trim($_POST["phone"]))); //htmlspecialchars(strtolower(trim($_POST["phone"])));
-    $password = htmlspecialchars($_POST["password"]); // htmlspecialchars($_POST["password"]);
+     // 0 - только начал и нужно отправить смс код
+     // 1 - получаем от пользователя смс код
+     // 2 - получаем пароль
+    // $phase = htmlspecialchars($_POST["phase"]);
+    // $phone = htmlspecialchars(strtolower(trim($_POST["phone"]))); //htmlspecialchars(strtolower(trim($_POST["phone"])));
+    // $password = htmlspecialchars($_POST["password"]); // htmlspecialchars($_POST["password"]);
+    // $smscode = htmlspecialchars($_POST["smscode"]);
 
-    $error = ((empty($password)) || (empty($phone)));
+    // $error = (empty($phase) || empty($phone) || ($phase == "1" && empty($smscode)) || ($phase == "2" && (empty($password) || empty($smscode))));
 
-    if (!$error){
-      $posts = R::findOne('users', ' phone LIKE ?', [ $phone ] );
-      if (!$posts) {
-        $codecheckmail = md5codegenerator();
-        $password = password_hash($password,PASSWORD_DEFAULT);
-        $post = R::dispense( 'users' );
-        $post->phone = $phone;
-        $post->password = $password;
-        $post->email_confirm_code = $codecheckmail;
-        $id = R::store( $post );
-        echo json_encode (array('success' => TRUE, 'error' => NULL));
+    // $error = (((empty($password)) && (empty($smscode))) || (empty($phone)));
+
+    // if (!$error){
+      $user = R::findOne('users', ' phone LIKE ?', [ $phone ] );
+      // Если пользователь новый
+      if (!$user) {
+        // Проверяем что начальная фаза
+        // echo $phase;
+        if ($phase == '0') {
+          $smscodenew = mt_rand ( 10000, 99999 );
+          $user = R::dispense( 'users' );
+          $user -> phone_confirm_code = $smscodenew;
+          $user -> phone = $phone;
+          $id = R::store( $user );
+          echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '0'));
+        }
+        else {
+          echo json_encode (array('success' => FALSE, 'error' => 'Такой телефон уже зарегистрирован', 'phase' => '0'));
+        }
+
+        
+
+        // $data = new stdClass();
+        // $data->to = '79138370020';
+        // $data->text = 'Hello World'; // Текст сообщения
+        // // $data->from = ''; // Если у вас уже одобрен буквенный отправитель, его можно указать здесь, в противном случае будет использоваться ваш отправитель по умолчанию
+        // // $data->time = time() + 7*60*60; // Отложить отправку на 7 часов
+        // // $data->translit = 1; // Перевести все русские символы в латиницу (позволяет сэкономить на длине СМС)
+        // // $data->test = 1; // Позволяет выполнить запрос в тестовом режиме без реальной отправки сообщения
+        // // $data->partner_id = '1'; // Можно указать ваш ID партнера, если вы интегрируете код в чужую систему
+        // $sms = $smsru->send_one($data); // Отправка сообщения и возврат данных в переменную
+
+        // if ($sms->status == "OK") { // Запрос выполнен успешно
+        //     echo "Сообщение отправлено успешно. ";
+        //     echo "ID сообщения: $sms->sms_id. ";
+        //     echo "Ваш новый баланс: $sms->balance";
+        // } else {
+        //     echo "Сообщение не отправлено. ";
+        //     echo "Код ошибки: $sms->status_code. ";
+        //     echo "Текст ошибки: $sms->status_text.";
+        // }
+
+        // $codecheckmail = md5codegenerator();
+        // $password = password_hash($password,PASSWORD_DEFAULT);
+        // $post = R::dispense( 'users' );
+        // $post->phone = $phone;
+        // $post->password = $password;
+        // $post->email_confirm_code = $codecheckmail;
+        // $id = R::store( $post );
+        // echo json_encode (array('success' => TRUE, 'error' => NULL));
       } else {
-        echo json_encode (array('success' => FALSE, 'error' => 'Такой телефон уже зарегистрирован'));
+        // Пользователь такой есть - смотрим фазу
+        if ($phase == '0') { // если получен телефон
+          $user = R::findOne('users', ' phone LIKE ?', [ $phone ] );
+          $smscodenew = mt_rand ( 10000, 99999 );
+          // $user = R::dispense( 'users' );
+          // echo $smscodenew;
+          $user -> phone_confirm_code = $smscodenew;
+          R::store( $user );
+          echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '0'));
+        }
+        if ($phase == '1') { // если ждем смс код
+          
+          if ($user['phone_confirm_code'] == strval($smscode)) {
+            echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '1'));
+          } else {
+            echo json_encode (array('success' => FALSE, 'error' => 'Неверный код', 'phase' => '1'));
+          }
+        }
+        if ($phase == '2') { // если ждем пароль с смс кодом
+          // $user = R::findOne('users', ' phone LIKE ?', [ $phone ] );
+          if ($user['phone_confirm_code'] ==  strval($smscode)) {
+            // $user = R::dispense( 'users' );
+            $user -> phone_confirm_code = NULL;
+            $user -> password = password_hash($password,PASSWORD_DEFAULT);
+            R::store( $user );
+            echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '2'));
+          } else {
+            echo json_encode (array('success' => FALSE, 'error' => 'Неверный код', 'phase' => '2'));
+          }
+        }
+        // else {
+        //   echo json_encode (array('success' => FALSE, 'error' => 'Такой телефон уже зарегистрирован', 'phase' => '0'));
+        // }
+
+        // echo json_encode (array('success' => FALSE, 'error' => 'Такой телефон уже зарегистрирован'));
       }
       
       // $mysqli->query("SET NAMES 'utf8'");
@@ -93,13 +177,21 @@
       //   }
         
       // }
-    }
-    else {
-      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон и парольь'));
-    }
+    // }
+    // else {
+    //   echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон и парольь'));
+    // }
   } 
   else
   {
-    echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон и пароль'));
+    if ($phase == '0') {
+      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон пароль'));
+    }
+    if ($phase == '1') {
+      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести код из смс'));
+    }
+    if ($phase == '2') {
+      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести пароль'));
+    }
   }
 ?>
