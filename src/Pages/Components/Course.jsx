@@ -17,7 +17,7 @@ const Course = ({ course }) => {
   const toggleOpen = () => {
     setOpen(!open)
   }
-  console.log('open :>> ', open)
+
   if (typeof course !== 'object' || !course.name || !course.lessons) return null
   return (
     <div className="flex flex-col p-3 bg-gray-100 rounded-md">
