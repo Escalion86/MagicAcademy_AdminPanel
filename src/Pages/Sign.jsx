@@ -5,15 +5,17 @@ import InputMask from 'react-input-mask'
 
 import Logo from '../img/HeadLogo.png'
 
+const defaultForm = {
+  phone: '79138370020',
+  password: '123',
+  passwordRepeat: '',
+  name: '',
+  smsCode: '',
+}
+
 const Sign = ({ user, setUserState }) => {
   const [error, setError] = useState(null)
-  const [form, setForm] = useState({
-    phone: '79138370020',
-    password: '123',
-    passwordRepeat: '',
-    name: '',
-    smsCode: '',
-  })
+  const [form, setForm] = useState(defaultForm)
   // const [phone, setPhone] = useState('79138370020')
   // const [password, setPassword] = useState('123')
   // const [name, setName] = useState('')
@@ -24,10 +26,7 @@ const Sign = ({ user, setUserState }) => {
 
   if (!registration && registrationPhase !== 0) {
     setRegistrationPhase(0)
-    setName('')
-    setSmsCode('')
-    passwordRepeat('')
-    password('')
+    setForm(defaultForm)
   }
 
   const SignIn = () => {
@@ -107,6 +106,12 @@ const Sign = ({ user, setUserState }) => {
     }
   }
 
+  const handleKeyDownEnter = (key) => {
+    if (key?.code === 'Enter') {
+      registration ? Register() : SignIn()
+    }
+  }
+
   return (
     <div
       className="min-h-screen pt-10 md:pt-16 pb-6 px-2 md:px-0"
@@ -152,6 +157,7 @@ const Sign = ({ user, setUserState }) => {
                     })
                   }
                   value={form.phone}
+                  onKeyDown={handleKeyDownEnter}
                   className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                 />
                 {/* <input
@@ -174,19 +180,26 @@ const Sign = ({ user, setUserState }) => {
                 </label>
                 <input
                   // disabled={registrationPhase !== 1}
-                  // inputMode="numeric"
+                  inputMode="numeric"
                   name="smscode"
                   // maxLength={5}
-                  type="number"
+                  type="text"
                   min={0}
                   max={99999}
                   id="smscode"
                   value={form.smsCode}
                   onChange={(e) => {
                     if (e.target.value.length <= 5) {
-                      setForm({ ...form, smsCode: e.target.value })
+                      console.log('e.target.value :>> ', e.target.value)
+                      setForm({
+                        ...form,
+                        smsCode: e.target.value.replace(/[^0-9]/gi, ''),
+                      })
                     }
                   }}
+                  onKeyDown={(key) =>
+                    form.smsCode.length === 5 ? handleKeyDownEnter(key) : null
+                  }
                   className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                 />
               </div>
@@ -204,6 +217,7 @@ const Sign = ({ user, setUserState }) => {
                   id="name"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  onKeyDown={handleKeyDownEnter}
                   className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                 />
               </div>
@@ -225,6 +239,7 @@ const Sign = ({ user, setUserState }) => {
                     onChange={(e) =>
                       setForm({ ...form, password: e.target.value })
                     }
+                    onKeyDown={handleKeyDownEnter}
                     className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                   />
                 </div>
@@ -244,6 +259,7 @@ const Sign = ({ user, setUserState }) => {
                       onChange={(e) =>
                         setForm({ ...form, passwordRepeat: e.target.value })
                       }
+                      onKeyDown={handleKeyDownEnter}
                       className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                     />
                   </div>
