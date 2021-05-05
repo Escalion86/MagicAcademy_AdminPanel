@@ -84,11 +84,9 @@ const SidePanel = ({
               activePageId={activePageId}
             />
           </div>
-          <img
-            className="hidden lg:block w-full m-auto flex-1 mt-6 px-2 opacity-100 z-0 object-contain"
-            src={Aik1_alt}
-            alt="logo"
-          />
+          <div className="hidden lg:flex flex-col justify-end w-full m-auto flex-1 mt-6 px-3 opacity-100 z-0">
+            <img className="object-contain" src={Aik1_alt} alt="logo" />
+          </div>
         </div>
       </div>
     </div>
