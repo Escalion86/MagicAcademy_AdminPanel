@@ -6,19 +6,35 @@ import InputMask from 'react-input-mask'
 import Logo from '../img/HeadLogo.png'
 
 const Sign = ({ user, setUserState }) => {
-  const [error, setError] = useState('')
-  const [phone, setPhone] = useState('79138370020')
-  const [password, setPassword] = useState('123')
-  const [smsCode, setSmsCode] = useState('')
-  const [passwordRepeat, setPasswordRepeat] = useState('')
+  const [error, setError] = useState(null)
+  const [form, setForm] = useState({
+    phone: '79138370020',
+    password: '123',
+    passwordRepeat: '',
+    name: '',
+    smsCode: '',
+  })
+  // const [phone, setPhone] = useState('79138370020')
+  // const [password, setPassword] = useState('123')
+  // const [name, setName] = useState('')
+  // const [smsCode, setSmsCode] = useState('')
+  // const [passwordRepeat, setPasswordRepeat] = useState('')
   const [registration, setRegistration] = useState(false)
   const [registrationPhase, setRegistrationPhase] = useState(0)
+
+  if (!registration && registrationPhase !== 0) {
+    setRegistrationPhase(0)
+    setName('')
+    setSmsCode('')
+    passwordRepeat('')
+    password('')
+  }
 
   const SignIn = () => {
     axios
       .post('http://magicacademyserver/signin.php', {
-        phone,
-        password,
+        phone: form.phone,
+        password: form.password,
       })
       .then(function (response) {
         console.log('user:', response.data?.user)
@@ -56,31 +72,37 @@ const Sign = ({ user, setUserState }) => {
   }
 
   const Register = () => {
-    if (registrationPhase === 2 && password !== passwordRepeat) {
+    if (registrationPhase === 2 && form.password !== form.passwordRepeat) {
       setError('Пароли не совпадают')
+    } else if (registrationPhase === 2 && form.name === '') {
+      setError('Поле "Имя" не может быть пустым')
     } else {
       axios
         .post('http://magicacademyserver/register.php', {
-          phone,
-          password,
+          phone: form.phone,
+          password: form.password,
           phase: registrationPhase,
-          smscode: smsCode,
+          smscode: form.smsCode,
+          name: form.name,
         })
         .then(function (response) {
           console.log('response: ', response)
-          if (response.data?.error) setError(response.data.error)
-          else {
-            if (registrationPhase === 0) {
+          if (response.data?.error) {
+            setError(response.data.error)
+          } else {
+            if (error !== null) setError(null)
+            if (response.data.phase === '0') {
               // На телефон выслан код
               setRegistrationPhase(1)
-            } else if (registrationPhase === 1) {
+            } else if (response.data.phase === '1') {
               // Код верен
               setRegistrationPhase(2)
-            } else if (registrationPhase === 2) SignIn() // Регистрация успешна
+            } else if (response.data.phase === '2') SignIn() // Регистрация успешна
           }
         })
         .catch(function (error) {
           console.log('error: ', error)
+          setError('Нет связи с сервером')
         })
     }
   }
@@ -112,21 +134,27 @@ const Sign = ({ user, setUserState }) => {
 
         <section className="mt-2">
           <div className="flex flex-col">
-            <div className="mb-4 pt-3 rounded bg-gray-200">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2 ml-3"
-                htmlFor="phone"
-              >
-                Телефон
-              </label>
-              <InputMask
-                id="phone"
-                mask="+7 (999) 999 9999"
-                onChange={(e) => setPhone(e.target.value.replace(/[^\d]/g, ''))}
-                value={phone}
-                className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
-              />
-              {/* <input
+            {(registrationPhase === 0 || !registration) && (
+              <div className="mb-4 pt-3 rounded bg-gray-200">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2 ml-3"
+                  htmlFor="phone"
+                >
+                  Телефон
+                </label>
+                <InputMask
+                  id="phone"
+                  mask="+7 (999) 999 9999"
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      phone: e.target.value.replace(/[^\d]/g, ''),
+                    })
+                  }
+                  value={form.phone}
+                  className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                />
+                {/* <input
                 name="phone"
                 type="text"
                 id="phone"
@@ -134,8 +162,9 @@ const Sign = ({ user, setUserState }) => {
                 onChange={(e) => setPhone(e.target.value)}
                 className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
               /> */}
-            </div>
-            {registrationPhase >= 1 && (
+              </div>
+            )}
+            {registrationPhase === 1 && (
               <div className="mb-4 pt-3 rounded bg-gray-200">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2 ml-3"
@@ -144,12 +173,37 @@ const Sign = ({ user, setUserState }) => {
                   Код из смс
                 </label>
                 <input
-                  disabled={registrationPhase !== 1}
+                  // disabled={registrationPhase !== 1}
+                  // inputMode="numeric"
                   name="smscode"
-                  // type="password"
+                  // maxLength={5}
+                  type="number"
+                  min={0}
+                  max={99999}
                   id="smscode"
-                  value={smsCode}
-                  onChange={(e) => setSmsCode(e.target.value)}
+                  value={form.smsCode}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 5) {
+                      setForm({ ...form, smsCode: e.target.value })
+                    }
+                  }}
+                  className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                />
+              </div>
+            )}
+            {registration && registrationPhase === 2 && (
+              <div className="mb-4 pt-3 rounded bg-gray-200">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2 ml-3"
+                  htmlFor="name"
+                >
+                  Имя
+                </label>
+                <input
+                  name="name"
+                  id="name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                 />
               </div>
@@ -167,8 +221,10 @@ const Sign = ({ user, setUserState }) => {
                     name="password"
                     type="password"
                     id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={form.password}
+                    onChange={(e) =>
+                      setForm({ ...form, password: e.target.value })
+                    }
                     className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                   />
                 </div>
@@ -184,8 +240,10 @@ const Sign = ({ user, setUserState }) => {
                       name="passwordrepeat"
                       type="password"
                       id="passwordrepeat"
-                      value={passwordRepeat}
-                      onChange={(e) => setPasswordRepeat(e.target.value)}
+                      value={form.passwordRepeat}
+                      onChange={(e) =>
+                        setForm({ ...form, passwordRepeat: e.target.value })
+                      }
                       className="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
                     />
                   </div>
@@ -209,11 +267,18 @@ const Sign = ({ user, setUserState }) => {
             )}
             <button
               name="send"
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+              className="disabled:cursor-not-allowed disabled:opacity-40 bg-purple-600  hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
               // type="submit"
               onClick={registration ? Register : SignIn}
+              disabled={registrationPhase === 1 && form.smsCode.length < 5}
             >
-              {registration ? 'Зарегистрироваться' : 'Вход'}
+              {registration
+                ? registrationPhase === 0
+                  ? 'Получить код по смс '
+                  : registrationPhase === 1
+                  ? 'Отправить код'
+                  : 'Зарегистрироваться'
+                : 'Вход'}
             </button>
           </div>
         </section>

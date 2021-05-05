@@ -25,8 +25,9 @@
   $phone = htmlspecialchars(strtolower(trim($_POST["phone"]))); //htmlspecialchars(strtolower(trim($_POST["phone"])));
   $password = htmlspecialchars($_POST["password"]); // htmlspecialchars($_POST["password"]);
   $smscode = htmlspecialchars($_POST["smscode"]);
+  $name = htmlspecialchars($_POST["name"]);
 
-  if (!empty($phase) && !empty($phone) && (!($phase == "1" && empty($smscode))) || (!($phase == "2" && (empty($password) || empty($smscode)))))
+  if (!empty($phase) && !empty($phone) && (!($phase == "1" && empty($smscode))) || (!($phase == "2" && (empty($password) || empty($smscode)|| empty($name)))))
   {
     $DB_Adress = "127.0.0.1";
     $DB_BaseName = "magicacademy";
@@ -105,12 +106,18 @@
         // Пользователь такой есть - смотрим фазу
         if ($phase == '0') { // если получен телефон
           $user = R::findOne('users', ' phone LIKE ?', [ $phone ] );
-          $smscodenew = mt_rand ( 10000, 99999 );
-          // $user = R::dispense( 'users' );
-          // echo $smscodenew;
-          $user -> phone_confirm_code = $smscodenew;
-          R::store( $user );
-          echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '0'));
+          // Проверяем существует ли пароль и если есть, то выводим что пользователь уже зареган
+          if ($user->password <> '') {
+            echo json_encode (array('success' => FALSE, 'error' => 'Такой пользователь уже зарегистрирован', 'phase' => '0'));
+          } else {
+            $smscodenew = mt_rand ( 10000, 99999 );
+            // $user = R::dispense( 'users' );
+            // echo $smscodenew;
+            $user -> phone_confirm_code = $smscodenew;
+            R::store( $user );
+            echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '0'));
+          }
+          
         }
         if ($phase == '1') { // если ждем смс код
           
@@ -126,6 +133,7 @@
             // $user = R::dispense( 'users' );
             $user -> phone_confirm_code = NULL;
             $user -> password = password_hash($password,PASSWORD_DEFAULT);
+            $user -> name = $name;
             R::store( $user );
             echo json_encode (array('success' => TRUE, 'error' => NULL, 'phase' => '2'));
           } else {
@@ -185,13 +193,13 @@
   else
   {
     if ($phase == '0') {
-      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон пароль'));
+      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести телефон'));
     }
     if ($phase == '1') {
       echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести код из смс'));
     }
     if ($phase == '2') {
-      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести пароль'));
+      echo json_encode (array('success' => FALSE, 'error' => 'Необходимо ввести имя и пароль'));
     }
   }
 ?>
