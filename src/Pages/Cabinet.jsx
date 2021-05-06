@@ -5,6 +5,7 @@ import axios from 'axios'
 import SidePanel from './Blocks/SidePanel'
 import Header from './Blocks/Header'
 import { DEFAULT_USER } from '../helpers/constants'
+import Account from './PageContent/Account'
 
 function Cabinet({
   page,
@@ -12,7 +13,7 @@ function Cabinet({
   courses,
   menuCfg,
   user = DEFAULT_USER,
-  userSetState,
+  setUser,
   onSignOut,
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,6 +23,17 @@ function Cabinet({
   }
   const closeMenu = () => {
     setMenuOpen(false)
+  }
+
+  const PageContent = (props) => {
+    if (typeof page?.pageContent === 'function') {
+      return page.pageContent(props)
+    } else
+      return (
+        <div className="text-gray-700 text-base w-full text-center">
+          Страница в разработке
+        </div>
+      )
   }
 
   return (
@@ -46,13 +58,8 @@ function Cabinet({
           {page.header}
         </h2>
         <main className="p-3">
-          {typeof page?.pageContent === 'function' ? (
-            page.pageContent({ courses })
-          ) : (
-            <div className="text-gray-700 text-base w-full text-center">
-              Страница в разработке
-            </div>
-          )}
+          {/* <PageContent courses={courses} user={user} setUser={setUser} /> */}
+          <Account courses={courses} user={user} setUser={setUser} />
         </main>
       </div>
     </div>

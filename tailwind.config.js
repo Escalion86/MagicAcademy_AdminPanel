@@ -5,7 +5,15 @@ module.exports = {
     extend: {
       minWidth: {
         9: '2.25rem',
+        25: '6.25rem',
         32: '8rem',
+        40: '10rem',
+      },
+      maxWidth: {
+        25: '6.25rem',
+        40: '10rem',
+        50: '12.5rem',
+        100: '25rem',
       },
       minHeight: {
         11: '2.75rem',
@@ -20,6 +28,7 @@ module.exports = {
       opacity: ['disabled'],
       backgroundColor: ['disabled'],
       cursor: ['disabled'],
+      textColor: ['disabled'],
     },
   },
   plugins: [],

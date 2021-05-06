@@ -174,7 +174,7 @@ function App() {
         courses={courses}
         menuCfg={menuCfg(pages, pagesGroups)}
         user={userState}
-        userSetState={setUserState}
+        setUser={setUserState}
         onSignOut={SignOut}
       />
     )
