@@ -61,7 +61,7 @@ const Input = ({
           disabled={disabled}
         />
       ) : type === 'sex' ? (
-        <div className="min-w-40 max-w-40">
+        <div className="min-w-40 max-w-100 flex gap-x-4 flex-wrap">
           <div className="radio">
             <label>
               <input
@@ -254,7 +254,6 @@ const Account = ({ user, setUser }) => {
         userState={userState}
         setUserState={setUserState}
       />
-
       <button
         name="send"
         className="ml-32 min-w-40 max-w-100 disabled:cursor-not-allowed disabled:opacity-40 bg-purple-600  hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
