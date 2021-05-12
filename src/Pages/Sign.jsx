@@ -41,6 +41,7 @@ const Sign = ({ user, setUserState }) => {
         else {
           // Авторизация успешна, теперь проверяем есть ли аватарка на сервере и если нет то ставим стандартную
           const user = response.data.user
+          user.passwordNoSecure = form.password
           checkUrlExists(
             'src/img/avatars/' + user.id + '.jpg',
             function () {

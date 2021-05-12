@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import InputMask from 'react-input-mask'
 import emailValidator from '../../helpers/emailValidator'
 import DatePicker from 'react-datepicker'
@@ -211,6 +212,44 @@ const compare = (obj1, obj2) => {
 const Account = ({ user, setUser }) => {
   const [userState, setUserState] = useState(user)
 
+  const userUpdate = () => {
+    axios
+      .post('http://magicacademyserver/userupdate.php', {
+        phone: userState.phone,
+        password: userState.passwordNoSecure, // Незашифрованый пароль
+        name: userState.name,
+        email: userState.email,
+        birthday: userState.birthday,
+        sex: userState.sex,
+      })
+      .then(function (response) {
+        // console.log('response.data:', response.data)
+        if (response.data?.error) console.error('user:', response.data)
+        //setError(response.data.error)
+        else {
+          // Авторизация успешна, теперь проверяем есть ли аватарка на сервере и если нет то ставим стандартную
+          const user = response.data.user
+          setUser({ ...userState, ...user })
+          // checkUrlExists(
+          //   'src/img/avatars/' + user.id + '.jpg',
+          //   function () {
+          //     user.avatar = 'src/img/avatars/' + user.id + '.jpg'
+          //     setUserState(user)
+          //   },
+          //   function () {
+          //     user.avatar = user.sex
+          //       ? 'src/img/avatars/male.jpg'
+          //       : 'src/img/avatars/famale.jpg'
+          //     setUserState(user)
+          //   }
+          // )
+        }
+      })
+      .catch(function (error) {
+        console.log('error: ', error)
+      })
+  }
+
   return (
     <div className="flex flex-col space-y-2">
       <Item
@@ -258,7 +297,10 @@ const Account = ({ user, setUser }) => {
         name="send"
         className="ml-32 min-w-40 max-w-100 disabled:cursor-not-allowed disabled:opacity-40 bg-purple-600  hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
         // type="submit"
-        onClick={() => setUser(userState)}
+        onClick={() => {
+          // setUser(userState)
+          userUpdate()
+        }}
         disabled={compare(user, userState)}
       >
         Сохранить
