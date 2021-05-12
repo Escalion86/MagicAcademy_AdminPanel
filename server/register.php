@@ -27,7 +27,7 @@
   $smscode = htmlspecialchars($_POST["smscode"]);
   $name = htmlspecialchars($_POST["name"]);
 
-  if (!empty($phase) && !empty($phone) && (!($phase == "1" && empty($smscode))) || (!($phase == "2" && (empty($password) || empty($smscode)|| empty($name)))))
+  if (isset($phase) && !empty($phone) && (!($phase == "1" && empty($smscode))) || (!($phase == "2" && (empty($password) || empty($smscode)|| empty($name)))))
   {
     $DB_Adress = "127.0.0.1";
     $DB_BaseName = "magicacademy";
