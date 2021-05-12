@@ -3,16 +3,30 @@ import React from 'react'
 import Stars from './Stars'
 
 const LessonCard = ({
-  name = 'Без названия',
-  description = '',
-  stars = 0,
-  status = 0, // 0 - не доступен, 1 - доступен, но не начат, 2 - не принят, 3 - на проверке, 4 - выполнен
-  avatar = null,
+  course = null,
+  lesson = null,
   className = '',
+  setPageId = () => {},
 }) => {
+  if (!lesson) return null
+  // status:  0 - не доступен, 1 - доступен, но не начат, 2 - не принят, 3 - на проверке, 4 - выполнен
+  const {
+    id = 0,
+    name = 'Без названия',
+    description = '',
+    stars = 0,
+    status = 0,
+    avatar = null,
+  } = lesson
   return (
     <li className={'min-w-min' + (className ? ' ' + className : '')}>
-      <a href="#" className="block px-5 py-4 bg-white rounded-md shadow">
+      <a
+        // href="#"
+        className="block m-1 px-5 py-4 bg-white rounded-md shadow cursor-pointer hover:shadow-active hover:bg-purple-100"
+        onClick={() =>
+          setPageId(4, { lesson, header: course.name + ': ' + lesson.name })
+        }
+      >
         <div className="flex justify-between items-center">
           <p className="text-sm font-medium leading-snug text-gray-900">
             {name}

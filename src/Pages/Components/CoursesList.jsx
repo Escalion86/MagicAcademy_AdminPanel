@@ -1,15 +1,17 @@
 import React from 'react'
 
-import Avatar from '../../img/avatar.jpg'
-
 import Course from './Course'
 
-const CoursesList = ({ courses }) => {
+const CoursesList = ({ courses, setPageId }) => {
   if (courses && typeof courses === 'object') {
     return (
       <div className="space-y-3">
         {courses.map((course, index) => (
-          <Course course={course} key={'course' + course.id} />
+          <Course
+            course={course}
+            key={'course' + course.id}
+            setPageId={setPageId}
+          />
         ))}
       </div>
     )

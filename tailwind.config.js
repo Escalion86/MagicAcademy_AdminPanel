@@ -21,6 +21,10 @@ module.exports = {
       inset: {
         menu: '3.70rem',
       },
+      boxShadow: {
+        active:
+          '0 1px 3px 1px rgba(76, 29, 149, 0.4), 0 1px 2px 1px rgba(76, 29, 149, 0.3)',
+      },
     },
   },
   variants: {

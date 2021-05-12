@@ -54,12 +54,43 @@ function Cabinet({
           closeMenu={closeMenu}
           onSignOut={onSignOut}
         />
-        <h2 className="text-2xl font-semibold py-2 px-6 border-b border-gray-200 text-gray-900 leading-tight">
-          {page.header}
-        </h2>
+        <div className="mx-3 flex items-center border-b border-gray-200 ">
+          {page.backToPageId !== null && page.backToPageId !== undefined && (
+            <div className="">
+              <a
+                className="flex cursor-pointer justify-between items-center px-2 py-1 bg-gray-200 rounded-lg hover:bg-purple-200 border border-purple-200"
+                onClick={() => {
+                  setPageId(page.backToPageId)
+                }}
+              >
+                <svg
+                  className="h-6 w-6 text-purple-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M19 13H6.75L12 18.25l-.664.75l-6.5-6.5l6.5-6.5l.664.75L6.75 12H19v1z"
+                  />
+                </svg>
+                {/* <span className="text-sm font-medium text-gray-600">Назад</span> */}
+              </a>
+            </div>
+          )}
+          <h2 className="text-2xl font-semibold py-2 px-2 text-gray-900 leading-tight">
+            {page.header}
+          </h2>
+        </div>
         <main className="p-3">
-          {/* <PageContent courses={courses} user={user} setUser={setUser} /> */}
-          <Account courses={courses} user={user} setUser={setUser} />
+          <PageContent
+            courses={courses}
+            user={user}
+            setUser={setUser}
+            setPageId={setPageId}
+            page={page}
+          />
         </main>
       </div>
     </div>
