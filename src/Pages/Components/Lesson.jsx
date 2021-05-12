@@ -1,7 +1,6 @@
 import React from 'react'
 
-const Lesson = ({ page }) => {
-  const { lesson } = page
+const Lesson = ({ lesson }) => {
   return <div>{lesson.description}</div>
 }
 

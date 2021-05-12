@@ -2,7 +2,7 @@ import React from 'react'
 
 import Course from './Course'
 
-const CoursesList = ({ courses, setPageId }) => {
+const CoursesList = ({ courses, setPageId, onLessonClick = () => {} }) => {
   if (courses && typeof courses === 'object') {
     return (
       <div className="space-y-3">
@@ -11,6 +11,7 @@ const CoursesList = ({ courses, setPageId }) => {
             course={course}
             key={'course' + course.id}
             setPageId={setPageId}
+            onLessonClick={onLessonClick}
           />
         ))}
       </div>

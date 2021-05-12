@@ -6,6 +6,7 @@ import SidePanel from './Blocks/SidePanel'
 import Header from './Blocks/Header'
 import { DEFAULT_USER } from '../helpers/constants'
 import Account from './PageContent/Account'
+import Title from './Components/Title'
 
 function Cabinet({
   page,
@@ -54,7 +55,8 @@ function Cabinet({
           closeMenu={closeMenu}
           onSignOut={onSignOut}
         />
-        <div className="mx-3 flex items-center border-b border-gray-200 ">
+        <main className="px-3 pb-3">
+          {/* <div className="mx-3 flex items-center border-b border-gray-200 ">
           {page.backToPageId !== null && page.backToPageId !== undefined && (
             <div className="">
               <a
@@ -75,15 +77,24 @@ function Cabinet({
                     d="M19 13H6.75L12 18.25l-.664.75l-6.5-6.5l6.5-6.5l.664.75L6.75 12H19v1z"
                   />
                 </svg>
-                {/* <span className="text-sm font-medium text-gray-600">Назад</span> */}
+                <span className="text-sm font-medium text-gray-600">Назад</span>
               </a>
             </div>
           )}
           <h2 className="text-2xl font-semibold py-2 px-2 text-gray-900 leading-tight">
             {page.header}
           </h2>
-        </div>
-        <main className="p-3">
+        </div> */}
+          {/* <Title
+            text={page.header}
+            btnOnClick={
+              page.backToPageId !== null && page.backToPageId !== undefined
+                ? () => {
+                    setPageId(page.backToPageId)
+                  }
+                : null
+            }
+          /> */}
           <PageContent
             courses={courses}
             user={user}

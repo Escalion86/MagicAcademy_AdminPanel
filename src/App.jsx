@@ -8,7 +8,6 @@ import Sign from './Pages/Sign'
 import Cabinet from './Pages/Cabinet'
 import Courses from './Pages/PageContent/Courses'
 import Account from './Pages/PageContent/Account'
-import Lesson from './Pages/PageContent/Lesson'
 
 import Avatar from './img/avatar.jpg'
 import { DEFAULT_USER } from './helpers/constants'
@@ -134,8 +133,6 @@ function App() {
     pageContent: Courses,
   })
 
-  console.log('page :>> ', page)
-
   useEffect(() => {
     setCourses(courseCfg(coursesDB, lessonsDB))
   }, [])
@@ -179,14 +176,14 @@ function App() {
       pageContent: Account,
       backToPageId: null,
     }, // 3
-    {
-      id: 4,
-      group: null,
-      name: 'Урок',
-      header: 'Урок',
-      pageContent: Lesson,
-      backToPageId: 0,
-    },
+    // {
+    //   id: 4,
+    //   group: null,
+    //   name: 'Урок',
+    //   header: 'Урок',
+    //   pageContent: Lesson,
+    //   backToPageId: 0,
+    // },
   ]
 
   const pagesGroups = [

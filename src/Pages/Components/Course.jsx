@@ -12,7 +12,7 @@ const ListArrow = ({ listOpen = false, onClick = () => {} }) => {
   )
 }
 
-const Course = ({ course, setPageId }) => {
+const Course = ({ course, setPageId, onLessonClick = () => {} }) => {
   const [open, setOpen] = useState(false)
   const toggleOpen = () => {
     setOpen(!open)
@@ -37,7 +37,7 @@ const Course = ({ course, setPageId }) => {
                 lesson={lesson}
                 course={course}
                 className={'lesson ' + (open ? '' : 'close')}
-                setPageId={setPageId}
+                onClick={() => onLessonClick(lesson)}
               />
             )
           })}

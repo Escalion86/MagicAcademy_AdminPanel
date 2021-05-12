@@ -6,7 +6,7 @@ const LessonCard = ({
   course = null,
   lesson = null,
   className = '',
-  setPageId = () => {},
+  onClick = () => {},
 }) => {
   if (!lesson) return null
   // status:  0 - не доступен, 1 - доступен, но не начат, 2 - не принят, 3 - на проверке, 4 - выполнен
@@ -23,9 +23,7 @@ const LessonCard = ({
       <a
         // href="#"
         className="block m-1 px-5 py-4 bg-white rounded-md shadow cursor-pointer hover:shadow-active hover:bg-purple-100"
-        onClick={() =>
-          setPageId(4, { lesson, header: course.name + ': ' + lesson.name })
-        }
+        onClick={onClick}
       >
         <div className="flex justify-between items-center">
           <p className="text-sm font-medium leading-snug text-gray-900">

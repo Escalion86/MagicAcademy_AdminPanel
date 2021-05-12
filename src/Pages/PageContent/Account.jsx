@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import InputMask from 'react-input-mask'
+import Title from '../Components/Title'
 import emailValidator from '../../helpers/emailValidator'
 import DatePicker from 'react-datepicker'
 import { registerLocale } from 'react-datepicker'
@@ -251,61 +252,64 @@ const Account = ({ user, setUser }) => {
   }
 
   return (
-    <div className="flex flex-col space-y-2">
-      <Item
-        type="phone"
-        className="flex-1"
-        name="Телефон (логин)"
-        stateParam="phone"
-        userState={userState}
-        setUserState={setUserState}
-        disabled
-      />
-      <Item
-        type="input"
-        className="flex-1"
-        name="Имя"
-        stateParam="name"
-        userState={userState}
-        setUserState={setUserState}
-      />
-      <Item
-        type="email"
-        className="flex-1"
-        name="E-Mail"
-        stateParam="email"
-        userState={userState}
-        setUserState={setUserState}
-      />
-      <Item
-        type="date"
-        className="flex-1"
-        name="Дата рождения"
-        stateParam="birthday"
-        userState={userState}
-        setUserState={setUserState}
-      />
-      <Item
-        type="sex"
-        className="flex-1"
-        name="Пол"
-        stateParam="sex"
-        userState={userState}
-        setUserState={setUserState}
-      />
-      <button
-        name="send"
-        className="ml-32 min-w-40 max-w-100 disabled:cursor-not-allowed disabled:opacity-40 bg-purple-600  hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        // type="submit"
-        onClick={() => {
-          // setUser(userState)
-          userUpdate()
-        }}
-        disabled={compare(user, userState)}
-      >
-        Сохранить
-      </button>
-    </div>
+    <>
+      <Title text="Параметры учетной записи" />
+      <div className="flex flex-col space-y-2">
+        <Item
+          type="phone"
+          className="flex-1"
+          name="Телефон (логин)"
+          stateParam="phone"
+          userState={userState}
+          setUserState={setUserState}
+          disabled
+        />
+        <Item
+          type="input"
+          className="flex-1"
+          name="Имя"
+          stateParam="name"
+          userState={userState}
+          setUserState={setUserState}
+        />
+        <Item
+          type="email"
+          className="flex-1"
+          name="E-Mail"
+          stateParam="email"
+          userState={userState}
+          setUserState={setUserState}
+        />
+        <Item
+          type="date"
+          className="flex-1"
+          name="Дата рождения"
+          stateParam="birthday"
+          userState={userState}
+          setUserState={setUserState}
+        />
+        <Item
+          type="sex"
+          className="flex-1"
+          name="Пол"
+          stateParam="sex"
+          userState={userState}
+          setUserState={setUserState}
+        />
+        <button
+          name="send"
+          className="ml-32 min-w-40 max-w-100 disabled:cursor-not-allowed disabled:opacity-40 bg-purple-600  hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+          // type="submit"
+          onClick={() => {
+            // setUser(userState)
+            userUpdate()
+          }}
+          disabled={compare(user, userState)}
+        >
+          Сохранить
+        </button>
+      </div>
+    </>
   )
 }
 
