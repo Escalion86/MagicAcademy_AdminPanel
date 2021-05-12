@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment } from 'react'
 // import { Menu } from '@headlessui/react'
 
 import './Header.css'
 
-import SearchInput from '../Components/SearchInput'
+// import SearchInput from '../Components/SearchInput'
 import { DEFAULT_USER } from '../../helpers/constants'
 
 const UserMenu = ({
@@ -143,9 +143,9 @@ const Header = ({
               menuOpen={menuOpen}
               onClick={onClickBurger}
             />
-            <div className="hidden sm:block ml-5 lg:ml-0 w-96">
+            {/* <div className="hidden sm:block ml-5 lg:ml-0 w-96">
               <SearchInput onPressEnter={() => {}} />
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center">
             <div className="ml-5 cursor-pointer">
